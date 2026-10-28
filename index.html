@@ -63,7 +63,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:28px 16px calc(2
 .szw{margin-top:10px;font-size:14px;color:var(--mute)}.szw div{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
 .sz{min-width:42px;height:38px;padding:0 8px;background:none;border:1px solid transparent;font:500 14px "Readex Pro",sans-serif;color:var(--ink)}
 .sz[aria-checked="true"]{border-color:var(--ink)}
-.cl{display:grid;grid-template-columns:76px 1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
+.cl{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
 .cl img{width:76px;height:96px;object-fit:cover;background:#e9e6e1;display:block}
 .ci b{display:block;font:500 15px/1.3 "Readex Pro",sans-serif}.ci small{display:block;color:var(--mute);margin:2px 0 8px}
 .cr{display:flex;align-items:center;gap:10px}
@@ -73,6 +73,12 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:28px 16px calc(2
 .line .del,.cl .del{background:none;border:0;padding:6px;color:var(--mute);display:grid;place-items:center}
 .del svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .cp{font-weight:500;white-space:nowrap}
+label.f select{width:100%;margin-top:4px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+#cart{margin:0 0 0 auto;height:100%;max-height:100%;width:min(420px,92vw);border-radius:0;border-width:0 0 0 1px;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px))}
+#cart[open]{display:flex;flex-direction:column;animation:cin .25s ease}#cart h2{margin:0 0 8px}#cart #lines{flex:1;min-height:0;overflow-y:auto}#cart .total{margin:14px 0 12px}
+#cart .cp,#checkout .cp{font-size:13px}
+@keyframes cin{from{transform:translateX(100%)}to{transform:none}}@media(prefers-reduced-motion:reduce){#cart[open]{animation:none}}
+.okb{text-align:center;padding:8px 4px}.okc{width:64px;height:64px;border-radius:50%;background:#1f9d55;color:#fff;font-size:36px;line-height:64px;margin:0 auto 14px}.okb h2{font-size:22px;margin:0 8px 10px}.okb p{color:var(--mute);margin:0 0 18px}#ok{text-align:center}
 .sale.so{color:#d4202f;text-decoration:line-through;text-decoration-thickness:1px;text-decoration-color:#d4202f}
 .add:disabled{background:#9a9a9a;cursor:not-allowed}
 .hd{display:block;color:inherit;text-decoration:none}#pd{max-width:520px;margin:0 auto}.back{display:inline-block;margin-bottom:14px;color:var(--mute);text-decoration:none}.desc{color:var(--mute);margin:0 0 8px}
@@ -103,8 +109,10 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:28px 16px calc(2
     <div class="box">
       <h3>Delivery details</h3>
       <label class="f">Full name<input id="fn" type="text" autocomplete="name"></label>
-      <label class="f">Phone number<input id="ph" type="tel" autocomplete="tel"></label>
-      <label class="f">Address<textarea id="ad" rows="2" autocomplete="street-address"></textarea></label>
+      <label class="f">Phone number<input id="ph" type="tel" inputmode="numeric" maxlength="14" placeholder="01XXXXXXXXX" autocomplete="tel"></label>
+      <label class="f">Governorate | المحافظة<select id="gv" autocomplete="address-level1"><option value="">Select governorate | اختر المحافظة</option><option value="Cairo - القاهرة">Cairo | القاهرة</option><option value="Giza - الجيزة">Giza | الجيزة</option><option value="Alexandria - الإسكندرية">Alexandria | الإسكندرية</option><option value="Qalyubia - القليوبية">Qalyubia | القليوبية</option><option value="Port Said - بورسعيد">Port Said | بورسعيد</option><option value="Suez - السويس">Suez | السويس</option><option value="Damietta - دمياط">Damietta | دمياط</option><option value="Dakahlia - الدقهلية">Dakahlia | الدقهلية</option><option value="Sharqia - الشرقية">Sharqia | الشرقية</option><option value="Kafr El Sheikh - كفر الشيخ">Kafr El Sheikh | كفر الشيخ</option><option value="Gharbia - الغربية">Gharbia | الغربية</option><option value="Monufia - المنوفية">Monufia | المنوفية</option><option value="Beheira - البحيرة">Beheira | البحيرة</option><option value="Ismailia - الإسماعيلية">Ismailia | الإسماعيلية</option><option value="Beni Suef - بني سويف">Beni Suef | بني سويف</option><option value="Fayoum - الفيوم">Fayoum | الفيوم</option><option value="Minya - المنيا">Minya | المنيا</option><option value="Assiut - أسيوط">Assiut | أسيوط</option><option value="Sohag - سوهاج">Sohag | سوهاج</option><option value="Qena - قنا">Qena | قنا</option><option value="Luxor - الأقصر">Luxor | الأقصر</option><option value="Aswan - أسوان">Aswan | أسوان</option><option value="Red Sea - البحر الأحمر">Red Sea | البحر الأحمر</option><option value="New Valley - الوادي الجديد">New Valley | الوادي الجديد</option><option value="Matrouh - مطروح">Matrouh | مطروح</option><option value="North Sinai - شمال سيناء">North Sinai | شمال سيناء</option><option value="South Sinai - جنوب سيناء">South Sinai | جنوب سيناء</option></select></label>
+      <label class="f">City / area | المدينة أو المنطقة<input id="ct" type="text" maxlength="60" placeholder="e.g. Nasr City | مدينة نصر" autocomplete="address-level2"></label>
+      <label class="f">Address in the city | العنوان بالتفصيل<textarea id="ad" rows="3" maxlength="250" placeholder="Street, building, floor, apartment | الشارع، العمارة، الدور، الشقة" autocomplete="street-address"></textarea></label>
       <h3>Payment method</h3>
       <label class="opt"><input type="radio" name="pay" value="Cash on delivery" checked><span><b>Cash on delivery</b><br><small>Pay in cash when your order arrives.</small></span></label>
       <label class="opt"><input type="radio" name="pay" value="Visa / card"><span><b>Visa / card</b><br><small>After you place the order, we contact you with a secure payment link.</small></span></label>
@@ -118,6 +126,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:28px 16px calc(2
   <img class="logo" alt="Wajd">
   <a href="https://www.instagram.com/wagd.eg" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@wagd.eg" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/share/1EkM1HktMj/?mibextid=wwXIfr" target="_blank" rel="noopener">Facebook</a><a href="https://wa.me/201277879319" target="_blank" rel="noopener">WhatsApp</a>
 </footer>
+<dialog id="ok" aria-labelledby="oktitle"><div class="okb"><div class="okc" aria-hidden="true">\u2713</div><h2 id="oktitle">Order placed successfully</h2><p id="okmsg"></p><a class="cta" href="#home">Continue shopping</a></div></dialog>
 <dialog id="menu" aria-label="Menu"><button class="lnk" data-close style="text-align:right;margin:0 0 8px">Close ✕</button><nav id="nav"></nav></dialog>
 <dialog id="sd" aria-label="Search"><input id="sq" type="search" placeholder="Search products" aria-label="Search products"><div id="sres"></div><button class="lnk" data-close>Close</button></dialog>
 <dialog id="cart" aria-label="Cart"><h2>Your cart</h2><div id="lines"></div><div class="total"><span>Total</span><span id="total">LE 0 EGP</span></div><a class="cta" id="wa" href="#checkout">Go to checkout</a><button class="lnk" data-close>Keep shopping</button></dialog>
@@ -193,11 +202,22 @@ document.addEventListener('click',function(e){
   if(qb){var o=qb.parentNode.querySelector('output');o.textContent=Math.min(20,Math.max(1,(+o.textContent||1)+(+qb.dataset.q)))}
   if(b){var cd2=b.closest('.card'),qo=cd2.querySelector('.qty output'),q=qo?(+qo.textContent||1):1,x=P.filter(function(p){return p.id==b.dataset.id})[0],sel=cardSel(cd2),f=cart.filter(function(c){return c.n===x.n&&c.s===sel})[0];if(f)f.q=Math.min(20,f.q+q);else{var pi=cd2.querySelector('.pic img');cart.push({n:x.n,p:x.p,s:sel,q:q,img:pi?pi.src:''})}if(qo)qo.textContent=1;drawCart();b.textContent='Added';setTimeout(function(){b.textContent='Add to cart'},900)}
 });
+function normPhone(v){var a='\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669',p='\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9';v=v.replace(/[\u0660-\u0669\u06f0-\u06f9]/g,function(c){var i=a.indexOf(c);return i<0?p.indexOf(c):i}).replace(/[\s\-().]/g,'');if(v.indexOf('+20')===0)v='0'+v.slice(3);else if(v.indexOf('0020')===0)v='0'+v.slice(4);else if(/^20\d{10}$/.test(v))v='0'+v.slice(2);return v}
+$('ph').addEventListener('input',function(){var v=this.value.replace(/[\u0660-\u0669\u06f0-\u06f9]/g,function(c){return String(c.charCodeAt(0)<0x6f0?c.charCodeAt(0)-0x660:c.charCodeAt(0)-0x6f0)});this.value=v.replace(/[^\d+]/g,'')});
 $('place').onclick=function(){
   var fn=$('fn').value.trim(),ph=$('ph').value.trim(),ad=$('ad').value.trim(),err=$('err');
   $('done').hidden=true;
   if(!cart.length){err.textContent='Your cart is empty. Add a product first.';return}
-  if(!fn||!ph||!ad){err.textContent='Enter your name, phone number and address.';return}
+  var bad=function(el,m){err.textContent=m;el.focus()};
+  ph=normPhone(ph);ad=ad.replace(/\s+/g,' ');
+  if(fn.length<2||!/[A-Za-z\u0600-\u06FF]/.test(fn)){bad($('fn'),'Please enter your full name.');return}
+  if(!/^01[0125]\d{8}$/.test(ph)){bad($('ph'),'Please enter a valid mobile number: 11 digits starting with 01 (for example 01012345678).');return}
+  var gv=$('gv').value,ct=$('ct').value.replace(/\s+/g,' ').trim(),L=/[A-Za-z\u0600-\u06FF]{2}/;
+  if(!gv){bad($('gv'),'Please select your governorate. | من فضلك اختر المحافظة.');return}
+  if(ct.length<2||!L.test(ct)){bad($('ct'),'Please enter your city or area, in Arabic or English. | من فضلك اكتب المدينة أو المنطقة.');return}
+  if(ad.length<6||!L.test(ad)){bad($('ad'),'Please enter your address in the city: street, building, floor and apartment. | من فضلك اكتب العنوان بالتفصيل: الشارع والعمارة والدور والشقة.');return}
+  ad=gv+' - '+ct+' - '+ad;
+  $('ph').value=ph;
   err.textContent='';
   var pay=document.querySelector('input[name=pay]:checked').value,sum=cart.reduce(function(t,c){return t+c.p*c.q},0);
   var msg='Hi Wajd, I would like to order:\n'+cart.map(function(c){return '- '+c.n+' ('+c.s+') x'+c.q}).join('\n')+'\nTotal: '+sum+' EGP\nPayment: '+pay+'\nName: '+fn+'\nPhone: '+ph+'\nAddress: '+ad;
@@ -205,9 +225,10 @@ $('place').onclick=function(){
   var btn=$('place'),o={date:new Date().toISOString(),name:fn,phone:ph,address:ad,payment:pay,items:cart.map(function(c){return c.n+' ('+c.s+') x'+c.q+' - '+(c.p*c.q)+' EGP'}).join('\n'),total:sum};
   btn.disabled=true;btn.textContent='Sending...';
   fetch(ORDER_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(o)}).then(function(){
-    cart=[];drawCart();$('done').innerHTML='<p><b>Thank you, '+esc(fn)+'!</b> Your order has been received. We will contact you on '+esc(ph)+' to confirm it.'+(pay==='Visa / card'?' We will send you the secure payment link.':'')+'</p>';$('done').hidden=false;btn.hidden=true;
+    cart=[];drawCart();$('okmsg').innerHTML='Thank you, <b>'+esc(fn)+'</b>. We have received your order and will contact you on '+esc(ph)+' to confirm it.'+(pay==='Visa / card'?' We will also send you the secure payment link.':'');btn.disabled=false;btn.textContent='Place order';$('ok').showModal();
   }).catch(function(){err.textContent='Could not send your order. Check your connection and try again.';btn.disabled=false;btn.textContent='Place order'});
 };
+$('ok').addEventListener('close',function(){['fn','ph','ct','ad','gv'].forEach(function(i){$(i).value=''});$('err').textContent='';go('home')});
 $('open').onclick=function(){$('cart').showModal()};
 $('mbtn').onclick=function(){$('menu').showModal()};
 $('sbtn').onclick=function(){$('sd').showModal();$('sq').focus()};
