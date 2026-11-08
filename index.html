@@ -127,7 +127,7 @@ label.f select{width:100%;margin-top:4px;padding:10px;border-radius:10px;border:
       <div class="total totbox"><span>Total</span><span id="cototal">LE 0 EGP</span></div>
       <button class="cta" id="place">Place order</button>
       <p id="err" role="alert"></p>
-      <div id="done" hidden><p>Your order is ready. Tap below to send it to us on WhatsApp.</p><a class="cta" id="send" target="_blank" rel="noopener" href="#">Send order on WhatsApp</a></div>
+      <div id="done" hidden><p id="doneMsg">Your order is ready. Tap below to send it to us on WhatsApp.</p><a class="cta" id="send" target="_blank" rel="noopener" href="#">Send order on WhatsApp</a></div>
     </div>
   </section>
 </main>
@@ -251,12 +251,20 @@ $('place').onclick=function(){
   err.textContent='';
   var pay=document.querySelector('input[name=pay]:checked').value,sum=cart.reduce(function(t,c){return t+c.p*c.q},0);
   var msg='Hi Wajd, I would like to order:\n'+cart.map(function(c){return '- '+c.n+' ('+c.s+') x'+c.q}).join('\n')+'\nTotal: '+sum+' EGP\nPayment: '+pay+'\nName: '+fn+'\nPhone: '+ph+'\nAddress: '+ad+($('note').value.trim()?'\nNotes: '+$('note').value.trim():'');
-  if(!ORDER_URL){$('send').href='https://wa.me/201277879319?text='+encodeURIComponent(msg);$('done').hidden=false;return}
-  var btn=$('place'),o={date:new Date().toISOString(),name:fn,phone:ph,address:ad,payment:pay,items:cart.map(function(c){return c.n+' ('+c.s+') x'+c.q+' - '+(c.p*c.q)+' EGP'}).join('\n'),total:sum,notes:$('note').value.trim()};
+  var waUrl='https://wa.me/201277879319?text='+encodeURIComponent(msg);
+  if(!ORDER_URL){$('send').href=waUrl;$('doneMsg').textContent='Your order is ready. Tap below to send it to us on WhatsApp.';$('done').hidden=false;return}
+  var btn=$('place'),o={id:'W'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),name:fn,phone:ph,address:ad,payment:pay,items:cart.map(function(c){return c.n+' ('+c.s+') x'+c.q+' - '+(c.p*c.q)+' EGP'}).join('\n'),total:sum,notes:$('note').value.trim()};
   btn.disabled=true;btn.textContent='Sending...';
-  fetch(ORDER_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(o)}).then(function(){
-    cart=[];drawCart();$('okmsg').innerHTML='Thank you, <b>'+esc(fn)+'</b>. We have received your order and will contact you on '+esc(ph)+' to confirm it.'+(pay==='Visa / card'?' We will also send you the secure payment link.':'');btn.disabled=false;btn.textContent='Place order';$('ok').showModal();
-  }).catch(function(){err.textContent='Could not send your order. Check your connection and try again.';btn.disabled=false;btn.textContent='Place order'});
+  var ctrl=new AbortController(),tm=setTimeout(function(){ctrl.abort()},20000);
+  var reset=function(){clearTimeout(tm);btn.disabled=false;btn.textContent='Place order'};
+  fetch(ORDER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o),signal:ctrl.signal,redirect:'follow'})
+  .then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text()})
+  .then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('bad response')}if(!j||j.ok!==true)throw new Error('rejected');
+    cart=[];drawCart();$('okmsg').innerHTML='Thank you, <b>'+esc(fn)+'</b>. We have received your order (ref <b>'+esc(o.id)+'</b>) and will contact you on '+esc(ph)+' to confirm it.'+(pay==='Visa / card'?' We will also send you the secure payment link.':'');reset();$('ok').showModal();
+  }).catch(function(){
+    reset();$('send').href=waUrl;$('doneMsg').textContent='Tap below to send your order on WhatsApp so it reaches us right away.';$('done').hidden=false;
+    err.textContent='We could not confirm that your order was received. Please send it on WhatsApp below, or try again. | لم نستطع تأكيد استلام طلبك، من فضلك ابعته على واتساب.';
+  });
 };
 $('ok').addEventListener('close',function(){['fn','ph','ct','ad','gv','note'].forEach(function(i){$(i).value=''});$('err').textContent='';go('home')});
 $('open').onclick=function(){$('cart').showModal()};
